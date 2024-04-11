@@ -1,18 +1,20 @@
-package com.dicoding.asclepius.view
+package com.dicoding.asclepius.view.main
 
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import com.dicoding.asclepius.data.ClassificationResults
+import com.dicoding.asclepius.R
+import com.dicoding.asclepius.data.local.entity.HistoryClassification
 import com.dicoding.asclepius.databinding.ActivityMainBinding
 import com.dicoding.asclepius.helper.ImageClassifierHelper
+import com.dicoding.asclepius.view.result.ResultActivity
 import org.tensorflow.lite.task.vision.classifier.Classifications
-import java.text.NumberFormat
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -24,10 +26,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbarMain.root)
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.analyzeButton.setOnClickListener {
             analyzeImage()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option_menu, menu)
+        return true
     }
 
     private fun startGallery() {
@@ -63,13 +71,19 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResults(results: List<Classifications>?, inferenceTime: Long) {
                 showToast("Berhasil")
-                val classificationResultsList = mutableListOf<ClassificationResults>()
+                val classificationResultsList = mutableListOf<HistoryClassification>()
                 results?.let { it ->
                     if (it.isNotEmpty() && it[0].categories.isNotEmpty()) {
                         println(it)
                         val sortedCategories = it[0].categories.sortedByDescending { it?.score }
                         sortedCategories.forEach { category ->
-                            classificationResultsList.add(ClassificationResults(category.label, category.score))
+                            classificationResultsList.add(
+                                HistoryClassification(
+                                label = category.label,
+                                score = category.score,
+                                imageUri = currentImageUri.toString()
+                            )
+                            )
                         }
                     } else {
                         showToast("No data")
@@ -81,13 +95,10 @@ class MainActivity : AppCompatActivity() {
         currentImageUri?.let { imageClassifierHelper.classifyStaticImage(it) }
     }
 
-    private fun moveToResult(results: ArrayList<ClassificationResults>?, inferenceTime: Long) {
+    private fun moveToResult(results: ArrayList<HistoryClassification>?, inferenceTime: Long) {
         val intent = Intent(this, ResultActivity::class.java)
         intent.putParcelableArrayListExtra(ResultActivity.EXTRA_CLASSIFICATION_RESULT, results)
         intent.putExtra(ResultActivity.EXTRA_INFERENCE_TIME, inferenceTime)
-        if (currentImageUri != null) {
-            intent.putExtra(ResultActivity.EXTRA_IMAGE, currentImageUri.toString())
-        }
         startActivity(intent)
     }
 
