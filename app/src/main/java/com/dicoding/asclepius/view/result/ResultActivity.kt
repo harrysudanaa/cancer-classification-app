@@ -28,7 +28,7 @@ class ResultActivity : AppCompatActivity() {
         val results = intent.getParcelableArrayListExtra<HistoryClassification>(
             EXTRA_CLASSIFICATION_RESULT
         )
-        println(results)
+
         val inferenceTime = intent.getLongExtra(EXTRA_INFERENCE_TIME, 0)
         val resultImage = results?.get(0)?.imageUri
         if (resultImage != null) {
@@ -55,6 +55,4 @@ class ResultActivity : AppCompatActivity() {
         const val EXTRA_CLASSIFICATION_RESULT = "classification_result"
         const val EXTRA_INFERENCE_TIME = "inference_time"
     }
-
-
 }

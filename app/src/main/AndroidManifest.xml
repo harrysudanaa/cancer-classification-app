@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,10 +18,6 @@
         <activity
             android:name=".view.history.HistoryActivity"
             android:exported="false" />
-        <activity
-            android:name=".view.BottomNavigationActivity"
-            android:exported="false"
-            android:label="@string/title_activity_bottom_navigation" />
         <activity
             android:name=".view.result.ResultActivity"
             android:exported="false" />
