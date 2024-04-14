@@ -1,6 +1,6 @@
 package com.dicoding.asclepius.view.result
 
-import android.net.Uri
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -30,10 +30,12 @@ class ResultActivity : AppCompatActivity() {
         )
 
         val inferenceTime = intent.getLongExtra(EXTRA_INFERENCE_TIME, 0)
-        val resultImage = results?.get(0)?.imageUri
+        val resultImage = results?.get(0)?.imageData
         if (resultImage != null) {
-            val resultImageUri = Uri.parse(resultImage)
-            binding.resultImage.setImageURI(resultImageUri)
+            val imageBitmap = BitmapFactory.decodeByteArray(
+                resultImage, 0, resultImage.size
+            )
+            binding.resultImage.setImageBitmap(imageBitmap)
         }
 
 
@@ -44,7 +46,8 @@ class ResultActivity : AppCompatActivity() {
                 val historyData = HistoryClassification(
                     label = results[0].label,
                     score = results[0].score,
-                    imageUri = results[0].imageUri
+                    imageData = results[0].imageData,
+                    date = results[0].date
                 )
                 resultViewModel.insertHistory(historyData)
             }

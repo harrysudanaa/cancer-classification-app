@@ -1,11 +1,18 @@
 package com.dicoding.asclepius.view
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dicoding.asclepius.data.local.entity.HistoryClassification
 import com.dicoding.asclepius.databinding.ListHistoryItemBinding
 
@@ -31,13 +38,13 @@ class HistoryAdapter(private val context: Context) : RecyclerView.Adapter<Histor
 
     class MyViewHolder(private val binding: ListHistoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(history: HistoryClassification, context: Context) {
-            val imageUri = Uri.parse(history.imageUri)
-            // permission error when show the image
-            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            context.contentResolver.takePersistableUriPermission(imageUri, flag)
-            binding.ivResultImage.setImageURI(imageUri)
+            val imageBitmap = BitmapFactory.decodeByteArray(
+                history.imageData, 0, history.imageData.size
+            )
+            binding.ivResultImage.setImageBitmap(imageBitmap)
             binding.tvResultClassification.text = history.label
             binding.tvResultScore.text = history.score.toString()
+            binding.tvDate.text = history.date
         }
     }
 }

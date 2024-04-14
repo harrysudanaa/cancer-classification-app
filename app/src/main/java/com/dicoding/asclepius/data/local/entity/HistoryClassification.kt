@@ -12,5 +12,6 @@ data class HistoryClassification(
     var id: Int = 0,
     var label: String = "",
     var score: Float = 0f,
-    var imageUri: String = ""
+    var imageData: ByteArray,
+    var date: String
 ) : Parcelable

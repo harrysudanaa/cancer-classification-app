@@ -1,9 +1,8 @@
 package com.dicoding.asclepius.view.main
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,13 +11,17 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import com.dicoding.asclepius.R
 import com.dicoding.asclepius.data.local.entity.HistoryClassification
 import com.dicoding.asclepius.databinding.ActivityMainBinding
+import com.dicoding.asclepius.helper.DateFormatterHelper
 import com.dicoding.asclepius.helper.ImageClassifierHelper
 import com.dicoding.asclepius.view.history.HistoryActivity
 import com.dicoding.asclepius.view.result.ResultActivity
 import org.tensorflow.lite.task.vision.classifier.Classifications
+import java.time.LocalDateTime
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -55,16 +58,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("WrongConstant")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            val selectedUri: Uri = data?.data ?: return
-            val takeFlags = data.flags and (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-            contentResolver.takePersistableUriPermission(selectedUri, takeFlags)
-        }
-    }
-
     private fun startGallery() {
         // TODO: Mendapatkan gambar dari Gallery.
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -72,12 +65,12 @@ class MainActivity : AppCompatActivity() {
 
     private val launcherGallery = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
+    ) { uri ->
         if (uri != null) {
             currentImageUri = uri
             showImage()
         } else {
-            Log.d("Photo Picker", "No media selected")
+            Log.d("Photo Picker", "No image selected")
         }
     }
 
@@ -103,14 +96,19 @@ class MainActivity : AppCompatActivity() {
                     if (it.isNotEmpty() && it[0].categories.isNotEmpty()) {
                         println(it)
                         val sortedCategories = it[0].categories.sortedByDescending { it?.score }
-                        sortedCategories.forEach { category ->
-                            classificationResultsList.add(
-                                HistoryClassification(
-                                label = category.label,
-                                score = category.score,
-                                imageUri = currentImageUri.toString()
-                            )
-                            )
+                        if (currentImageUri != null) {
+                            sortedCategories.forEach { category ->
+                                val newImage = contentResolver.openInputStream(currentImageUri!!)
+                                    ?.readBytes()
+                                classificationResultsList.add(
+                                    HistoryClassification(
+                                        label = category.label,
+                                        score = category.score,
+                                        imageData = newImage!!,
+                                        date = DateFormatterHelper.formatDate(Date())
+                                    )
+                                )
+                            }
                         }
                     } else {
                         showToast("No data")
