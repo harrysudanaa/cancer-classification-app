@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageClassifierHelper: ImageClassifierHelper
 
     private val launcherGallery = registerForActivityResult(
-        ActivityResultContracts.GetContent()
+        ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         if (uri != null) {
             currentImageUri = uri
@@ -72,8 +73,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startGallery() {
         // TODO: Mendapatkan gambar dari Gallery.
-        croppedImageUri = File(filesDir, "croppedImage.jpg").toUri()
-        launcherGallery.launch("image/*")
+        launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     private fun showImage(listUri: List<Uri>) {
