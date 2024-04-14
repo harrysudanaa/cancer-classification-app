@@ -13,29 +13,19 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-<<<<<<< HEAD:app/src/main/java/com/dicoding/asclepius/view/main/MainActivity.kt
-import androidx.annotation.RequiresApi
 import com.dicoding.asclepius.R
 import com.dicoding.asclepius.data.local.entity.HistoryClassification
-=======
 import androidx.core.net.toUri
-import com.dicoding.asclepius.data.ClassificationResults
->>>>>>> main:app/src/main/java/com/dicoding/asclepius/view/MainActivity.kt
 import com.dicoding.asclepius.databinding.ActivityMainBinding
 import com.dicoding.asclepius.helper.DateFormatterHelper
 import com.dicoding.asclepius.helper.ImageClassifierHelper
-<<<<<<< HEAD:app/src/main/java/com/dicoding/asclepius/view/main/MainActivity.kt
 import com.dicoding.asclepius.view.history.HistoryActivity
 import com.dicoding.asclepius.view.result.ResultActivity
 import org.tensorflow.lite.task.vision.classifier.Classifications
-import java.time.LocalDateTime
 import java.util.Date
-=======
 import com.yalantis.ucrop.UCrop
-import org.tensorflow.lite.task.vision.classifier.Classifications
 import java.io.File
 import java.util.UUID
->>>>>>> main:app/src/main/java/com/dicoding/asclepius/view/MainActivity.kt
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -113,22 +103,8 @@ class MainActivity : AppCompatActivity() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
-<<<<<<< HEAD:app/src/main/java/com/dicoding/asclepius/view/main/MainActivity.kt
-    private val launcherGallery = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri ->
-        if (uri != null) {
-            currentImageUri = uri
-            showImage()
-        } else {
-            Log.d("Photo Picker", "No image selected")
-        }
-    }
 
-    private fun showImage() {
-=======
     private fun showImage(listUri: List<Uri>) {
->>>>>>> main:app/src/main/java/com/dicoding/asclepius/view/MainActivity.kt
         // TODO: Menampilkan gambar sesuai Gallery yang dipilih.
         cropImage.launch(listUri)
     }
@@ -147,9 +123,9 @@ class MainActivity : AppCompatActivity() {
                     if (it.isNotEmpty() && it[0].categories.isNotEmpty()) {
                         println(it)
                         val sortedCategories = it[0].categories.sortedByDescending { it?.score }
-                        if (currentImageUri != null) {
+                        if (croppedImageUri != null) {
                             sortedCategories.forEach { category ->
-                                val newImage = contentResolver.openInputStream(currentImageUri!!)
+                                val newImage = contentResolver.openInputStream(croppedImageUri!!)
                                     ?.readBytes()
                                 classificationResultsList.add(
                                     HistoryClassification(
@@ -175,12 +151,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, ResultActivity::class.java)
         intent.putParcelableArrayListExtra(ResultActivity.EXTRA_CLASSIFICATION_RESULT, results)
         intent.putExtra(ResultActivity.EXTRA_INFERENCE_TIME, inferenceTime)
-<<<<<<< HEAD:app/src/main/java/com/dicoding/asclepius/view/main/MainActivity.kt
-=======
-        if (croppedImageUri != null) {
-            intent.putExtra(ResultActivity.EXTRA_IMAGE, croppedImageUri.toString())
-        }
->>>>>>> main:app/src/main/java/com/dicoding/asclepius/view/MainActivity.kt
         startActivity(intent)
     }
 

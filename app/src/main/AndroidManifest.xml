@@ -16,7 +16,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
-            android:name=".view.ResultActivity"
+            android:name=".view.history.HistoryActivity"
             android:exported="false" />
         <activity
             android:name=".view.result.ResultActivity"
