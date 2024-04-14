@@ -67,5 +67,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/galleryButton"
         app:layout_constraintVertical_bias="0.987" />
+    <Button
+        android:id="@+id/btn_news_articles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Articles"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
