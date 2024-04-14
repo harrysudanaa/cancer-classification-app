@@ -19,6 +19,7 @@ import androidx.core.net.toUri
 import com.dicoding.asclepius.databinding.ActivityMainBinding
 import com.dicoding.asclepius.helper.DateFormatterHelper
 import com.dicoding.asclepius.helper.ImageClassifierHelper
+import com.dicoding.asclepius.view.article.NewsArticleActivity
 import com.dicoding.asclepius.view.history.HistoryActivity
 import com.dicoding.asclepius.view.result.ResultActivity
 import org.tensorflow.lite.task.vision.classifier.Classifications
@@ -77,8 +78,10 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarMain.root)
 
         binding.galleryButton.setOnClickListener { startGallery() }
-        binding.analyzeButton.setOnClickListener {
-            analyzeImage()
+        binding.analyzeButton.setOnClickListener { analyzeImage() }
+        binding.btnNewsArticles.setOnClickListener {
+            val intent = Intent(this@MainActivity, NewsArticleActivity::class.java)
+            startActivity(intent)
         }
     }
 
