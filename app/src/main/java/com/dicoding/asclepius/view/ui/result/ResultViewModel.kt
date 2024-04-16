@@ -1,4 +1,4 @@
-package com.dicoding.asclepius.view.result
+package com.dicoding.asclepius.view.ui.result
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -13,10 +13,4 @@ class ResultViewModel(application: Application) : AndroidViewModel(application) 
     fun insertHistory(history: HistoryClassification) = viewModelScope.launch {
         historyRepository.insertHistory(history)
     }
-
-    fun deleteHistory(history: HistoryClassification) = viewModelScope.launch {
-        historyRepository.deleteHistory(history)
-    }
-
-    fun getAllHistory() = historyRepository.getAllHistory()
 }
