@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.dicoding.asclepius.view.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_resultFragment"
+            app:destination="@id/resultFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.dicoding.asclepius.view.ui.history.HistoryFragment"
+        android:label="@string/history_title"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/navigation_news"
+        android:name="com.dicoding.asclepius.view.ui.news.NewsFragment"
+        android:label="@string/news_title"
+        tools:layout="@layout/fragment_news" />
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.dicoding.asclepius.view.ui.result.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result">
+        <argument
+            android:name="classification_result"
+            app:argType="com.dicoding.asclepius.data.local.entity.HistoryClassification[]" />
+        <argument
+            android:name="inference_time"
+            app:argType="long" />
+    </fragment>
+</navigation>

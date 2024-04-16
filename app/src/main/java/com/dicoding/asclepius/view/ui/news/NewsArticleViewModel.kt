@@ -1,4 +1,4 @@
-package com.dicoding.asclepius.view.article
+package com.dicoding.asclepius.view.ui.news
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -8,6 +8,7 @@ class NewsArticleViewModel(application: Application) : AndroidViewModel(applicat
     private val newsArticleRepository = NewsArticleRepository()
 
     val newsArticle = newsArticleRepository.newsArticle
+    val isLoading = newsArticleRepository.isLoading
 
     fun getNewsArticle() = newsArticleRepository.getNewsArticle()
 }

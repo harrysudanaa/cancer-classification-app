@@ -1,7 +1,7 @@
 package com.dicoding.asclepius.repository
 
 import android.util.Log
-import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dicoding.asclepius.BuildConfig
 import com.dicoding.asclepius.data.remote.response.ArticlesItem
@@ -14,9 +14,13 @@ import retrofit2.Response
 class NewsArticleRepository {
 
     private val _newsArticle = MutableLiveData<List<ArticlesItem>?>()
-    val newsArticle : MutableLiveData<List<ArticlesItem>?> = _newsArticle
+    val newsArticle: LiveData<List<ArticlesItem>?> = _newsArticle
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
 
     fun getNewsArticle() {
+        _isLoading.value = true
         val client = ApiConfig.getApiService().getNewsArticle(
             q = "cancer",
             category = "health",
@@ -28,6 +32,7 @@ class NewsArticleRepository {
                 call: Call<NewsArticleResponse>,
                 response: Response<NewsArticleResponse>
             ) {
+                _isLoading.value = false
                 if (response.isSuccessful) {
                     _newsArticle.value = response.body()?.articles
                     Log.d("REPO", "${response.body()}")
@@ -37,6 +42,7 @@ class NewsArticleRepository {
             }
 
             override fun onFailure(call: Call<NewsArticleResponse>, t: Throwable) {
+                _isLoading.value = false
                 Log.e(TAG, "onFailure: ${t.message}")
             }
 

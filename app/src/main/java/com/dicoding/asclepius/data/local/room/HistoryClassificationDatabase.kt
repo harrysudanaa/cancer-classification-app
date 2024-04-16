@@ -7,12 +7,12 @@ import androidx.room.RoomDatabase
 import com.dicoding.asclepius.data.local.entity.HistoryClassification
 
 @Database(entities = [HistoryClassification::class], version = 1, exportSchema = false)
-abstract class HistoryClassificationDatabase : RoomDatabase(){
+abstract class HistoryClassificationDatabase : RoomDatabase() {
 
-    abstract fun historyClassificationDao() : HistoryClassificationDao
+    abstract fun historyClassificationDao(): HistoryClassificationDao
 
     companion object {
-        private fun buildDatabase(context: Context) : HistoryClassificationDatabase {
+        private fun buildDatabase(context: Context): HistoryClassificationDatabase {
             return Room.databaseBuilder(
                 context,
                 HistoryClassificationDatabase::class.java,
@@ -21,9 +21,9 @@ abstract class HistoryClassificationDatabase : RoomDatabase(){
         }
 
         @Volatile
-        private var INSTANCE : HistoryClassificationDatabase? = null
+        private var INSTANCE: HistoryClassificationDatabase? = null
 
-        fun getDatabaseInstance(context: Context) : HistoryClassificationDatabase {
+        fun getDatabaseInstance(context: Context): HistoryClassificationDatabase {
             if (INSTANCE == null) {
                 synchronized(this) {
                     INSTANCE = buildDatabase(context)

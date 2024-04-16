@@ -15,20 +15,7 @@
         android:theme="@style/Theme.Asclepius"
         tools:targetApi="31">
         <activity
-            android:name=".view.article.NewsArticleActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".view.history.HistoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.result.ResultActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.main.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,6 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

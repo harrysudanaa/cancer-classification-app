@@ -1,50 +1,65 @@
 package com.dicoding.asclepius.view
 
-import android.Manifest
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
+import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.dicoding.asclepius.data.local.entity.HistoryClassification
 import com.dicoding.asclepius.databinding.ListHistoryItemBinding
+import java.text.NumberFormat
 
-class HistoryAdapter(private val context: Context) : RecyclerView.Adapter<HistoryAdapter.MyViewHolder>() {
-    // TODO: Make Adapter to recycler view
-    private var historyData = listOf<HistoryClassification>()
-
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(historyData[position], context)
-    }
+class HistoryAdapter :
+    ListAdapter<HistoryClassification, HistoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ListHistoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ListHistoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = historyData.size
-
-    fun setData(newData: List<HistoryClassification>) {
-        historyData = newData
-        notifyDataSetChanged()
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val history = getItem(position)
+        holder.bind(history)
     }
 
-    class MyViewHolder(private val binding: ListHistoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(history: HistoryClassification, context: Context) {
-            val imageBitmap = BitmapFactory.decodeByteArray(
-                history.imageData, 0, history.imageData.size
-            )
+    class MyViewHolder(private val binding: ListHistoryItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        @SuppressLint("SetTextI18n")
+        fun bind(history: HistoryClassification) {
+            val imageBitmap = history.imageData?.let {
+                BitmapFactory.decodeByteArray(
+                    history.imageData, 0, it.size
+                )
+            }
             binding.ivResultImage.setImageBitmap(imageBitmap)
             binding.tvResultClassification.text = history.label
-            binding.tvResultScore.text = history.score.toString()
+            binding.tvResultScore.text =
+                NumberFormat.getPercentInstance().format(history.score).toString()
             binding.tvDate.text = history.date
         }
     }
+
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<HistoryClassification>() {
+            override fun areItemsTheSame(
+                oldItem: HistoryClassification,
+                newItem: HistoryClassification
+            ): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(
+                oldItem: HistoryClassification,
+                newItem: HistoryClassification
+            ): Boolean {
+                return oldItem == newItem
+            }
+
+        }
+    }
+
 }
